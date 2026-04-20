@@ -23,10 +23,12 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 const bookRoutes = require('./routes/book');
 const adminRoutes = require('./routes/admin');
+const userRoutes = require('./routes/user'); // 👉 Đã thêm route user
 
 app.use('/api', adminRoutes);
 app.use('/api', bookRoutes);
 app.use('/api', authRoutes); 
+app.use('/api', userRoutes); // 👉 Đã khai báo sử dụng route user
 
 // Cho phép truy cập công khai thư mục public/uploads
 app.use('/uploads', express.static('public/uploads'));

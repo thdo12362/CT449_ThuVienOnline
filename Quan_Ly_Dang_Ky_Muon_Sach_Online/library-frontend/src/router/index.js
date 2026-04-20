@@ -30,6 +30,12 @@ const router = createRouter({
       name: 'book-detail',
       component: () => import('../views/BookDetailView.vue')
     },
+    // 👉 THÊM ĐƯỜNG DẪN TRANG NỘI QUY MƯỢN TRẢ
+    {
+      path: '/terms',
+      name: 'terms-of-service',
+      component: () => import('../views/TermsOfServiceView.vue') // Sẽ tạo file này sau
+    },
     // Khu vực của Quản trị viên - Thủ thư (ADMIN) - Đã được làm gọn thành 1 trang duy nhất
     {
       path: '/admin',
@@ -37,7 +43,6 @@ const router = createRouter({
       component: () => import('../views/AdminDashboardView.vue'),
       meta: { requiresAuth: true, role: 'ADMIN' }
     }
-    
   ]
 })
 

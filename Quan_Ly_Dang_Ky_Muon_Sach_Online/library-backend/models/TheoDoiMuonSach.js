@@ -1,21 +1,43 @@
 const mongoose = require('mongoose');
 
 const theoDoiMuonSachSchema = new mongoose.Schema({
-  // 2 Khóa ngoại trỏ về Độc giả và Sách
-  MaDocGia: { type: String, ref: 'DocGia', required: true },
-  MaSach: { type: String, ref: 'Sach', required: true },
+  MaDocGia: { type: String, required: true }, // Bỏ ref ở đây
+  MaSach: { type: String, required: true },   // Bỏ ref ở đây
   
   NgayMuon: { type: Date, default: Date.now },
   NgayTra: { type: Date },
-  NgayTraThucTe: { type: Date }, // 👉 Nơi lưu giờ phút giây trả sách thực tế
+  NgayTraThucTe: { type: Date },
+  
+  // 👉 THÊM MỚI: Ngày người dùng báo mất sách (để tính thời hạn 7 ngày nộp phạt)
+  NgayBaoMat: { type: Date },
 
-  // 👉 TRƯỜNG BỔ SUNG CHO WEB (Quản lý tiến độ):
   TrangThai: { 
     type: String, 
-    enum: ['CHODUYET', 'DANGMUON', 'DATRA', 'TUCHOI'], 
+    enum: ['CHODUYET', 'DANGMUON', 'DATRA', 'TUCHOI', 'MATSACH', 'DAGIAIQUYET'], 
     default: 'CHODUYET' 
-  }
-}, { collection: 'TheoDoiMuonSach' });
+  },
+  
+  LyDoTuChoi: { type: String, default: '' },
+  TienPhat: { type: Number, default: 0 }
 
-// Đã sửa lại chữ 't' thường cho khớp với tên biến khai báo ở trên
+}, { 
+  collection: 'TheoDoiMuonSach',
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+theoDoiMuonSachSchema.virtual('thongTinDocGia', {
+  ref: 'DocGia',
+  localField: 'MaDocGia', 
+  foreignField: 'MaDocGia', 
+  justOne: true 
+});
+
+theoDoiMuonSachSchema.virtual('thongTinSach', {
+  ref: 'Sach',
+  localField: 'MaSach',
+  foreignField: 'MaSach',
+  justOne: true
+});
+
 module.exports = mongoose.model('TheoDoiMuonSach', theoDoiMuonSachSchema, 'TheoDoiMuonSach');
